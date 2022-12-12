@@ -1,0 +1,39 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+	"version": "1.0",
+	"title": "Sample text"
+    },
+    "paths": {
+	"/hello": {
+            "get": {
+		"x-mojo-to": "hello#world",
+		"operationId": "hello",
+		"summary": "Get a smiley face",
+		"responses": {
+		    "200": {
+			"description": "It's a smiley face",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"face": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    },
+    "servers": [
+	{
+	    "url": "/api"
+	}
+    ]
+}
+			
+                  
