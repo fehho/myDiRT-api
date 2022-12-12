@@ -1,12 +1,11 @@
 package MyApp;
 use Mojo::Base 'Mojolicious', -signatures;
-
 # This method will run once at server start
 sub startup ($self) {
 
   # Load configuration from config file
   my $config = $self->plugin('NotYAMLConfig');
-
+  $self->plugin(OpenAPI => {spec => $self->static->file("api.json")->path});
   # Configure the application
   $self->secrets($config->{secrets});
 
