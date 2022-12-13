@@ -23,8 +23,11 @@
 					"rank": {
 					    "type": "string"
 					},
-					"access": {
+					"subordinates": {
 					    "type": "object"
+					},
+					"documents": {
+					    "type": "integer"
 					}
 				    }
 				}

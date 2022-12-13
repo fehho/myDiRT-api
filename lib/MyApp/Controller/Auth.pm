@@ -60,16 +60,22 @@ sub info {
     my $userData = {};
     my $status = 200;
     unless(checkTokenState($self) ){
-	$userData->{name}   = ["Steve", '', "Jobs"];
-	$userData->{rank}   = 'E10';
-	$userData->{access} = {
-	    deadbeef => 0,
-	    c0c0c0c0 => 1,
+	$userData->{name}         = ["Steve", '', "Jobs"];
+	$userData->{rank}         = 'E10';
+	$userData->{documents}    = 420;
+	$userData->{subordinates} = {
+	    deadbeef => {
+		access    => 1,
+		name      => ["Steve", "", "Wozniak"],
+		rank      => "E2",
+		documents => 0
+	    }
 	};
     } else {
 	$userData->{reason} = "being named el bozo";
     }
     $self->render(openapi => $userData);
 }
-
+    
+	
 1;
