@@ -42,11 +42,34 @@ sub login {
   $self->render(openapi => $response, status => $status);
 }
 
+sub checkTokenState {
+    my $self = shift;
+    my $errorCode = 0;
+    $errorCode += 1 unless $cache->get( $self->param('token') );
+    return $errorCode;
+}
+
 sub check {
-  my $self = shift;
-  my $errorCode = 0;
-  $errorCode += 1 unless $cache->get( $self->param('token') );
-  $self->render(openapi => {fail => $errorCode});
+    my $self = shift;
+    my $errorCode = checkTokenState($self);
+    $self->render(openapi => {fail => $errorCode});
+}
+
+sub info {
+    my $self = shift;
+    my $userData = {};
+    my $status = 200;
+    unless(checkTokenState($self) ){
+	$userData->{name}   = ["Steve", '', "Jobs"];
+	$userData->{rank}   = 'E10';
+	$userData->{access} = {
+	    deadbeef => 0,
+	    c0c0c0c0 => 1,
+	};
+    } else {
+	$userData->{reason} = "being named el bozo";
+    }
+    $self->render(openapi => $userData);
 }
 
 1;
