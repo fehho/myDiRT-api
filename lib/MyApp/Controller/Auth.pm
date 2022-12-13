@@ -3,12 +3,15 @@ use Mojo::Base "Mojolicious::Controller";
 
 use Crypt::Passphrase;
 use Crypt::Passphrase::Argon2;
+use Session::Token;
 
 my $auth = Crypt::Passphrase->new(
     encoder => Crypt::Passphrase::Argon2->new(
         time_cost => 1
     )
 );
+
+my $tokens = Session::Token->new();
 
 my $static = $auth->hash_password("baba booey");
 
@@ -20,15 +23,12 @@ sub login {
   my $status = 200;
   if( $auth->verify_password( $self->param('pass'), $static ) ){
       $status = 200;
-      $response->{token} = "nLd5ogAQpG7mEPpxYbm/cw==";
+      $response->{token} = $tokens->get;
   } else {
       $status = 418;
       $response->{reason} = "being cringe";
   }
-      
-
   
-  # Render back the same data as you received using the "openapi" handler
   $self->render(openapi => $response, status => $status);
 }
 
