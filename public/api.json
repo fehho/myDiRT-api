@@ -65,7 +65,7 @@
 		}
 	    }
 	},
-	"/check_token": {
+	"/login": {
 	    "post": {
 		"x-mojo-to": "auth#check",
 		"operationId": "checkToken",
