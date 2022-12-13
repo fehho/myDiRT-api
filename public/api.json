@@ -64,6 +64,29 @@
 		    }
 		}
 	    }
+	},
+	"/check_token": {
+	    "post": {
+		"x-mojo-to": "auth#check",
+		"operationId": "checkToken",
+		"summary": "Verify that a token is presently valid.",
+		"responses": {
+		    "200": {
+			"description": "Non-zero value indicates failure reason",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"code": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
 	}
     },
     "servers": [
