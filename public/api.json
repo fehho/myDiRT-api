@@ -27,6 +27,43 @@
 		    }
 		}
 	    }
+	},
+	"/get_token": {
+	    "post": {
+		"x-mojo-to": "auth#login",
+		"operationId": "getToken",
+		"summary": "Try to get a session token using username/password pair",
+		"responses": {
+		    "200": {
+			"description": "Successful login",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"token": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    },
+		    "418": {
+			"description": "Unsuccessful login",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"reason": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
 	}
     },
     "servers": [
