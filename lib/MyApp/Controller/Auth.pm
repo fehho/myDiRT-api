@@ -16,7 +16,11 @@ my $auth = Crypt::Passphrase->new(
 
 my $tokens = Session::Token->new();
 
-my $cache = CHI->new( driver => 'Memory', global => 1 );
+my $cache = CHI->new(
+    driver => 'Memory',
+    global => 1,
+    expires_in => 3600
+);
 
 my $static = $auth->hash_password("baba booey");
 
