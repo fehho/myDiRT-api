@@ -7,7 +7,7 @@
     "paths": {
 	"/entity": {
 	    "post": {
-		"x-mojo-to": "auth#info",
+		"x-mojo-to": "person#info",
 		"operationId": "getInfo",
 		"summary": "Gets metadata related to the person",
 		"responses": {
@@ -76,7 +76,7 @@
 	},
 	"/get_token": {
 	    "post": {
-		"x-mojo-to": "auth#login",
+		"x-mojo-to": "person#login",
 		"operationId": "getToken",
 		"summary": "Try to get a session token using username/password pair",
 		"responses": {
@@ -113,7 +113,7 @@
 	},
 	"/check_token": {
 	    "post": {
-		"x-mojo-to": "auth#check",
+		"x-mojo-to": "person#check",
 		"operationId": "checkToken",
 		"summary": "Verify that a token is presently valid.",
 		"responses": {

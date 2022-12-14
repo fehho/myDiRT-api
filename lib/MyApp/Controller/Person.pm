@@ -1,4 +1,4 @@
-package MyApp::Controller::Auth;
+package MyApp::Controller::Person;
 use Mojo::Base "Mojolicious::Controller";
 
 use Crypt::Passphrase;
