@@ -51,9 +51,9 @@
 		}
 	    }				
 	},
-	"/hello": {
+	"/health": {
             "get": {
-		"x-mojo-to": "hello#world",
+		"x-mojo-to": "meta#health",
 		"operationId": "hello",
 		"summary": "Get a smiley face",
 		"responses": {
