@@ -1,10 +1,9 @@
 package MyApp::Controller::Person;
 use Mojo::Base "Mojolicious::Controller";
-
 use Crypt::Passphrase;
 use Crypt::Passphrase::Argon2;
 use Session::Token;
-use CHI;
+
 #use Data::Serializer;         # needed for storing non-scalars in CHI 
 #use Data::Serializer::Serial;
 
@@ -16,13 +15,9 @@ my $auth = Crypt::Passphrase->new(
 
 my $tokens = Session::Token->new();
 
-my $cache = CHI->new(
-    driver => 'Memory',
-    global => 1,
-    expires_in => 3600
-);
-
 my $static = $auth->hash_password("baba booey");
+
+my $cache = $MyApp::cache;
 
 sub login {
   # Validate input request or return an error document
