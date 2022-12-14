@@ -5,6 +5,52 @@
 	"title": "Sample text"
     },
     "paths": {
+	"/entity": {
+	    "post": {
+		"x-mojo-to": "person#info",
+		"operationId": "getInfo",
+		"summary": "Gets metadata related to the person",
+		"responses": {
+		    "200": {
+			"description": "Get name parts, rank, and who user has permissions to.",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"name": {
+					    "type": "array"
+					},
+					"rank": {
+					    "type": "string"
+					},
+					"subordinates": {
+					    "type": "object"
+					},
+					"documents": {
+					    "type": "integer"
+					}
+				    }
+				}
+			    }
+			}
+		    },
+		    "418": {
+			"description": "Unsuccessful login",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"reason": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }				
+	},
 	"/hello": {
             "get": {
 		"x-mojo-to": "hello#world",
@@ -30,7 +76,7 @@
 	},
 	"/get_token": {
 	    "post": {
-		"x-mojo-to": "auth#login",
+		"x-mojo-to": "person#login",
 		"operationId": "getToken",
 		"summary": "Try to get a session token using username/password pair",
 		"responses": {
@@ -62,6 +108,43 @@
 			    }
 			}
 		    }
+		}
+	    }
+	},
+	"/check_token": {
+	    "post": {
+		"x-mojo-to": "person#check",
+		"operationId": "checkToken",
+		"summary": "Verify that a token is presently valid.",
+		"responses": {
+		    "200": {
+			"description": "Non-zero value indicates failure reason",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"code": {
+					    "type": "integer"
+					}
+				    }
+				}
+			    }
+			}
+		    },
+		    "418": {
+			"description": "Unsuccessful login",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"reason": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }	   
 		}
 	    }
 	}
