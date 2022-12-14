@@ -43,6 +43,8 @@ sub login {
 }
 
 sub checkTokenState {
+    use Data::Dumper;
+    print Dumper $cache;
     my $self = shift;
     my $errorCode = 0;
     $errorCode += 1 unless $cache->get( $self->param('token') );
@@ -75,7 +77,7 @@ sub info {
 	$status = 418;
 	$userData->{reason} = "being named el bozo";
     }
-    $self->render(openapi => $userData);
+    $self->render(status => $status, openapi => $userData);
 }
     
 	
