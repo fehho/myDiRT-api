@@ -31,9 +31,17 @@ sub login {
   my $response = {};
   my $status = 200;
   if( $auth->verify_password( $self->param('pass') || '', $static ) ){
-      $status = 200;
-      $response->{token} = $tokens->get;
-      $cache->set($response->{token}, 1);
+    $status = 200;
+    my $unique;
+    until($unique){
+      my $token = $tokens->get;
+      $unique = $token and next unless $cache->get($token);
+      $tokens = Session::Token->new;
+      # reseed this worker's generator
+      # all workers will likely start with the same seed upon spawning
+    }
+    $response->{token} = $unique;
+    $cache->set($response->{token}, 1);
   } else {
       $status = 418;
       $response->{reason} = "being cringe";
