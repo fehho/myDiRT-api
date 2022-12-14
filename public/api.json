@@ -111,9 +111,9 @@
 		}
 	    }
 	},
-	"/login": {
+	"/check_token": {
 	    "post": {
-		"x-mojo-to": "auth#login",
+		"x-mojo-to": "auth#check",
 		"operationId": "checkToken",
 		"summary": "Verify that a token is presently valid.",
 		"responses": {
