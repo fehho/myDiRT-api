@@ -14,20 +14,22 @@ sub startup ($self) {
   # Load configuration from config file
   my $config = $self->plugin('JSONConfig');
   $self->plugin(OpenAPI => {
-      spec => $self->static->file("api.json")->path,
-      security => {
-	  tokenAuthn => sub {
-	      my ($c, $definition, $scopes, $cb) = @_;
-	      print "\nAt least I run.\n";
-	      use Data::Dumper;
-	      my $error = undef;
-	      $error = "Bad token"
-		  unless $cache->get($c->req->param('token'));
-	      print $error;
-	      $c->$cb( $error );
-	  }
+    spec => $self->static->file("api.json")->path,
+    security => {
+      tokenAuthn => sub {
+	my ($c, $definition, $scopes, $cb) = @_;
+	my $error = undef;
+	if( my $token = $c->req->param('token') ){
+	  $error = "Bad token"
+	    unless $cache->get($token);
+	} else {
+	  $error = "No token seen";
+	}
+	$c->$cb( $error );
       }
+    }
   });
+  
   # Configure the application
   $self->secrets($config->{secrets});
 
