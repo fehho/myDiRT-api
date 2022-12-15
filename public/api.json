@@ -125,7 +125,7 @@
 	"/check_token": {
 	    "post": {
 		"x-mojo-to": "person#check",
-		"operationId": "checkToken",
+		"operationId": "getIsValid",
 		"security": [{"tokenAuthn": []}],
 		"summary": "Verify that a token is presently valid.",
 		"responses": {

@@ -32,12 +32,6 @@ sub startup ($self) {
   
   # Configure the application
   $self->secrets($config->{secrets});
-
-  # Router
-  my $r = $self->routes;
-
-  # Normal route to controller
-  $r->get('/')->to('Example#welcome');
 }
 
 1;
