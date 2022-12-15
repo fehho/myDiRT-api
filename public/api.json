@@ -4,6 +4,16 @@
 	"version": "1.0",
 	"title": "Sample text"
     },
+    "components": {
+	"securitySchemes": {
+	    "tokenAuthn": {
+		"type": "apiKey",
+		"name": "token",
+		"in": "query",
+		"description": "132 bit base64 string recieved from /get_token needed for all authenticated endpoints"
+	    }
+	}
+    },
     "paths": {
 	"/entity": {
 	    "post": {
@@ -115,6 +125,7 @@
 	    "post": {
 		"x-mojo-to": "person#check",
 		"operationId": "checkToken",
+		"security": [{"tokenAuthn": []}],
 		"summary": "Verify that a token is presently valid.",
 		"responses": {
 		    "200": {

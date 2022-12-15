@@ -57,7 +57,7 @@ sub checkTokenState {
 
 sub check {
     my $self = shift;
-    my $errorCode = checkTokenState($self);
+    my $errorCode = 0;
     $self->render(openapi => {fail => $errorCode});
 }
 
