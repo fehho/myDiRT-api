@@ -31,11 +31,12 @@ Checks that credentials contained inside of body params belong to a user, and if
 
   my $response = {};
   my $status = 200;
-  if( $auth->verify_password( $self->param('pass') || '', $static ) ){
+  if( $auth->verify_password( $self->param('pass'), $static ) ){
     $status = 200;
     my $unique;
     until($unique){
       my $token = $tokens->get;
+      # uncoverable branch false this should never happen on a single thread
       $unique = $token and next unless $cache->get($token);
       $tokens = Session::Token->new;
       # reseed this worker's generator

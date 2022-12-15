@@ -89,6 +89,22 @@
 	    "post": {
 		"x-mojo-to": "person#login",
 		"operationId": "getToken",
+		"requestBody": {
+		    "required": true,
+		    "content": {
+			"application/x-www-form-urlencoded": {
+			    "schema": {
+				"properties": {
+				    "pass": {
+					"type": "string",
+					"minLength": 8
+				    }
+				},
+				"required": [ "pass" ]
+			    }
+			}
+		    }
+		},
 		"summary": "Try to get a session token using username/password pair",
 		"responses": {
 		    "200": {
