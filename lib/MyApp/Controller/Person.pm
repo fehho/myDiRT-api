@@ -3,6 +3,7 @@ use Mojo::Base "Mojolicious::Controller";
 use Crypt::Passphrase;
 use Crypt::Passphrase::Argon2;
 use Session::Token;
+use DBI;
 
 #use Data::Serializer;         # needed for storing non-scalars in CHI 
 #use Data::Serializer::Serial;

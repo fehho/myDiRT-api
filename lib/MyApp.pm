@@ -12,7 +12,7 @@ sub startup ($self) {
   ));
 
   # Load configuration from config file
-  my $config = $self->plugin('NotYAMLConfig');
+  my $config = $self->plugin('JSONConfig');
   $self->plugin(OpenAPI => {spec => $self->static->file("api.json")->path});
   # Configure the application
   $self->secrets($config->{secrets});

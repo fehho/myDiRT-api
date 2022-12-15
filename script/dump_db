@@ -1,0 +1,19 @@
+#! perl
+use warnings;
+use strict;
+use DBI;
+
+use Mojolicious::Lite;
+use Mojo::File qw(curfile);
+my $conf = curfile->dirname->path('../my_app.json');
+my $config = plugin 'JSONConfig' => { file => $conf };
+
+my $driver = 'dbi:ODBC:Driver={SQL Server}';
+my $host = $config->{mssql}->{hostname};
+my $db   = $config->{mssql}->{database};
+my $user = $config->{mssql}->{username};
+my $pass = $config->{mssql}->{password};
+
+my $dsn = "$driver;Server=$host;Database=$db;User Id=$user;Password=$pass;";
+
+print $dsn;
