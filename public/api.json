@@ -19,6 +19,7 @@
 	    "post": {
 		"x-mojo-to": "person#info",
 		"operationId": "getInfo",
+		"security": [{"tokenAuthn": []}],
 		"summary": "Gets metadata related to the person",
 		"responses": {
 		    "200": {
@@ -166,5 +167,3 @@
 	}
     ]
 }
-			
-                  
