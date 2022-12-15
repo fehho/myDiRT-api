@@ -5,8 +5,9 @@ use Crypt::Passphrase::Argon2;
 use Session::Token;
 use DBI;
 
-#use Data::Serializer;         # needed for storing non-scalars in CHI 
-#use Data::Serializer::Serial;
+=head1 Person.pm - Controller for actions about a person and their data
+Anything that is about individual, plus any persons above and below, go here.
+=cut
 
 my $auth = Crypt::Passphrase->new(
     encoder => Crypt::Passphrase::Argon2->new(
@@ -21,7 +22,11 @@ my $static = $auth->hash_password("baba booey");
 my $cache = $MyApp::cache;
 
 sub login {
-  # Validate input request or return an error document
+
+=head2 login
+Checks that credentials contained inside of body params belong to a user, and if so, give an authentication token. Gives 401 and a generic failed login error if there are either no credentials or wrong credentials.
+=cut
+
   my $self = shift->openapi->valid_input or return;
 
   my $response = {};
@@ -46,40 +51,39 @@ sub login {
   $self->render(openapi => $response, status => $status);
 }
 
-sub checkTokenState {
-    use Data::Dumper;
-    my $self = shift;
-    my $errorCode = 0;
-    $errorCode += 1 unless $cache->get( $self->param('token') );
-    return $errorCode;
-}
-
 sub check {
+
+=head2 check
+Takes a token and returns at what unix timestamp it will expire at.
+=cut
+    
     my $self = shift;
     my $errorCode = 0;
-    $self->render(openapi => {fail => $errorCode});
+    $self->render(openapi => { 'expires_at' =>
+	$cache->get_expires_at($self->param('token'))
+    });
 }
 
 sub info {
+
+=head2 info
+Takes a token and returns some information about the user that token belongs to, as well as the same information for subordinates.
+=cut
+    
     my $self = shift;
     my $userData = {};
     my $status = 200;
-    unless(checkTokenState($self) ){
-	$userData->{name}         = ["Steve", '', "Jobs"];
-	$userData->{rank}         = 'O1';
-	$userData->{documents}    = 420;
-	$userData->{subordinates} = {
-	    deadbeef => {
-		access    => 1,
-		name      => ["Steve", "", "Wozniak"],
-		rank      => "E10",
-		documents => 0
-	    }
-	};
-    } else {
-	$status = 418;
-	$userData->{reason} = "being named el bozo";
-    }
+    $userData->{name}         = ["Steve", '', "Jobs"];
+    $userData->{rank}         = 'O1';
+    $userData->{documents}    = 420;
+    $userData->{subordinates} = {
+	deadbeef => {
+	    access    => 1,
+	    name      => ["Steve", "", "Wozniak"],
+	    rank      => "E10",
+	    documents => 0
+	}
+    };
     $self->render(status => $status, openapi => $userData);
 }
     
