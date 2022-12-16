@@ -6,3 +6,4 @@ requires 'Session::Token';
 requires 'CHI';
 requires 'Params::Util'; #unlisted dependency of String::RewritePrefix, which itself is a dependancy of CHI
 requires 'MCE::Shared';
+requires 'DBI';
