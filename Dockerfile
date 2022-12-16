@@ -1,6 +1,6 @@
 FROM perl
 WORKDIR /opt/mojo-hello_world
 COPY . .
-RUN cpanm --installdeps -n .
+RUN cpm install
 EXPOSE 3000
 CMD ./script/my_app prefork
