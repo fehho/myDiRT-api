@@ -26,7 +26,7 @@ my $schema = make_schema_at(
 	dump_directory => './lib',
     },
     [
-        "dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Database=TestDB;Server=localhost,1433;TrustServerCertificate=yes",
+        "dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Database=MyDirtDB;Server=localhost,1433;TrustServerCertificate=yes",
         'SA',
         'Passw0rd',
      { RaiseError => 1 }
