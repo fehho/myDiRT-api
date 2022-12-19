@@ -8,11 +8,6 @@ use Mojo::File qw(curfile);
 my $conf = curfile->dirname->path('../my_app.json');
 my $config = plugin 'JSONConfig' => { file => $conf };
 
-my $driver = 'dbi:ODBC:Driver=ODBC Driver 18 for SQL Server';
-my $host = $config->{mssql}->{hostname};
-my $db   = $config->{mssql}->{database};
-my $user = $config->{mssql}->{username};
-my $pass = $config->{mssql}->{password};
 
 #my $dbh = DBI->connect("dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Server=localhost,1433;TrustServerCertificate=yes", 'SA', 'Passw0rd', { RaiseError => 1 });
 #my $dsn = "$driver;Server=$host;OUP-DEV-DEAN\MSSQLSERVER01;initial catalog=MyDirtDB;trusted_connection=yes;TrustServerCertificate=yes;";
@@ -26,10 +21,10 @@ my $schema = make_schema_at(
 	dump_directory => './lib',
     },
     [
-        "dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Database=MyDirtDB;Server=localhost,1433;TrustServerCertificate=yes",
-        'SA',
-        'Passw0rd',
-     { RaiseError => 1 }
+        $config->{mssql}->{dbstring},
+        $config->{mssql}->{username},
+        $config->{mssql}->{password},
+        { RaiseError => 1 }
     ]
 );
 #my $schema = MyDirt::Schema->connect(

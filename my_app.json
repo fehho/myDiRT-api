@@ -1,11 +1,10 @@
 {
-  "secrets": [
-    "08c07fda3bd18c4f5f1b260d10be537237092df8"
-  ],
-  "mssql": {
-    "hostname": "127.0.0.1",
-    "database": "mydirtdb",
-    "username": "SA",
-    "password": "password"
-  }
+    "secrets": [
+      "08c07fda3bd18c4f5f1b260d10be537237092df8"
+    ],
+    "mssql": {
+	"dbstring":  "dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Database=MyDirtDB;Server=localhost,1433;TrustServerCertificate=yes", 
+	"username": "SA",
+	"password": "Passw0rd"
+    }
 }
