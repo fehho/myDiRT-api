@@ -14,6 +14,24 @@ my $db   = $config->{mssql}->{database};
 my $user = $config->{mssql}->{username};
 my $pass = $config->{mssql}->{password};
 
-my $dbh = DBI->connect("dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Server=localhost,1433;TrustServerCertificate=yes", 'SA', 'Passw0rd', { RaiseError => 1 });
+#my $dbh = DBI->connect("dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Server=localhost,1433;TrustServerCertificate=yes", 'SA', 'Passw0rd', { RaiseError => 1 });
 #my $dsn = "$driver;Server=$host;OUP-DEV-DEAN\MSSQLSERVER01;initial catalog=MyDirtDB;trusted_connection=yes;TrustServerCertificate=yes;";
 
+package MyDirt::Schema;
+use base 'DBIx::Class::Schema';
+use DBIx::Class::Schema::Loader qw/ make_schema_at /;
+my $schema = make_schema_at(
+    'MyDirt::Schema', {
+	debug => 1,
+	dump_directory => './lib',
+    },
+    [
+        "dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Database=TestDB;Server=localhost,1433;TrustServerCertificate=yes",
+        'SA',
+        'Passw0rd',
+     { RaiseError => 1 }
+    ]
+);
+#my $schema = MyDirt::Schema->connect(
+use Data::Dumper;
+print Dumper MyDirt::Schema;
