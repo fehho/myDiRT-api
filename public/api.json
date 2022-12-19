@@ -15,6 +15,29 @@
 	}
     },
     "paths": {
+	"/health/{worker}": {
+	    "get": {
+		"x-mojo-to": "meta#health",
+		"operationId": "getHealthOf",
+		"summary": "Get health of a specifc worker",
+		"responses": {
+		    "200": {
+			"description": "It's a smiley face",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"face": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	},
 	"/entity": {
 	    "post": {
 		"x-mojo-to": "person#info",
