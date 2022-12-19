@@ -4,8 +4,8 @@
   ],
   "mssql": {
     "hostname": "127.0.0.1",
-    "database": "name",
-    "username": "user",
-    "password": "pass"
+    "database": "mydirtdb",
+    "username": "SA",
+    "password": "password"
   }
 }
