@@ -54,7 +54,7 @@ Checks that credentials contained inside of body params belong to a user, and if
       # all workers will likely start with the same seed upon spawning
     }
     $response->{token} = $unique;
-    $cache->set($response->{token}, 1);
+    $cache->set($response->{token}, 2);
   } else {
       $status = 418;
       $response->{reason} = "being cringe";
@@ -111,14 +111,24 @@ sub infoOfSubordinate {
     my $self = shift->openapi->valid_input or return;
     my $airman = $orm->resultset('TblSubordinate')
 	->find( $self->param('key') );
-    my $subordinateData = {
-	name => [
-	    $airman->subfirstname,
-	    $airman->submiddlename,
-	    $airman->sublastname
-       ]
-    };
-    $self->render(openapi => $subordinateData);
+    my $callingUser = $cache->get($self->param('token'));
+    my $status;
+    my $response;
+    if( $airman and $airman->tbl_xref_user_subordinates
+	->search({ userid => $callingUser }) ){
+	$response = {
+	    name => [
+		$airman->subfirstname,
+		$airman->submiddlename,
+		$airman->sublastname
+	    ]
+	};
+	$status = 200;
+    } else {
+	$response = { reason => 'Supplied key does not belong to one of your subordinates' };
+	$status = 418;
+    }
+    $self->render(status => $status, openapi => $response);
 }
 
 1;
