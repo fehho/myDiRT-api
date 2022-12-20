@@ -17,7 +17,7 @@ my $orm = MyDirt::Schema->connect(
         { RaiseError => 1 }
 );
 
-say $orm->resultset('TblUser')->create({
+my $snuffy = $orm->resultset('TblUser')->create({
      userfirstname => 'Airman',
      usermiddlename => 'Onesee',
      userlastname => 'Snuffy',
@@ -25,5 +25,17 @@ say $orm->resultset('TblUser')->create({
      roleid => 1,
      organizationid => 1,
      rankid => 1
-})->userid;
+});
 
+my $snuffyAsSubordinate = $orm->resultset('TblSubordinate')->create({
+    subfirstname => $snuffy->userfirstname,
+    submiddlename => $snuffy->usermiddlename,
+    sublastname => $snuffy->userlastname
+})->subordinateid;
+
+say $snuffy->userid;
+
+$orm->resultset('TblXrefUserSubordinate')->create({
+    userid => $orm->resultset('TblUser')->next(),
+    subordinateid => $snuffyAsSubordinate
+});
