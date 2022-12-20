@@ -5,8 +5,10 @@ use Crypt::Passphrase::Argon2;
 use Session::Token;
 use DBI;
 use MyDirt::Schema;
+
 =head1 Person.pm - Controller for actions about a person and their data
 Anything that is about individual, plus any persons above and below, go here.
+
 =cut
 
 my $auth = Crypt::Passphrase->new(
@@ -15,7 +17,6 @@ my $auth = Crypt::Passphrase->new(
     )
 );
 
-use Data::Dumper;
 my $config = $MyApp::config;
 
 my $orm = MyDirt::Schema->connect(
@@ -25,7 +26,6 @@ my $orm = MyDirt::Schema->connect(
         { RaiseError => 1 }
 );
 
-print Dumper $orm->resultset('TblUser')->find(2);
 my $tokens = Session::Token->new();
 
 my $static = $auth->hash_password("baba booey");
@@ -101,7 +101,6 @@ Takes a token and returns some information about the user that token belongs to,
 	    documents => 0
 	}
     };
-    print Dumper $userData;
     $self->render(status => $status, openapi => $userData);
 }
     
