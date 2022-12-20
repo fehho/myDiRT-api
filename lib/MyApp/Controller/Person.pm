@@ -86,7 +86,11 @@ Takes a token and returns some information about the user that token belongs to,
     my $userData = {};
     my $status = 200;
     my $user = $orm->resultset('TblUser')->find(2);
-    $userData->{name}         = [$user->userfirstname, $user->usermiddlename, $user->userlastname];
+    $userData->{name}         = [
+				 $user->userfirstname,
+				 $user->usermiddlename,
+				 $user->userlastname
+				];
     $userData->{rank}         = $user->rankid->ranktype;
     $userData->{documents}    = $user->tbl_xref_user_docs->count;
     $userData->{subordinates} = {
