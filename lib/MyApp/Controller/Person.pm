@@ -93,16 +93,32 @@ Takes a token and returns some information about the user that token belongs to,
 				];
     $userData->{rank}         = $user->rankid->ranktype;
     $userData->{documents}    = $user->tbl_xref_user_docs->count;
-    $userData->{subordinates} = {
-	deadbeef => {
-	    access    => 1,
-	    name      => ["Steve", "", "Wozniak"],
-	    rank      => "E10",
-	    documents => 0
-	}
-    };
+    $userData->{subordinates} = {};
+    for($user->tbl_xref_user_subordinates->all){
+	my $airman = $_->subordinateid;
+	$userData->{subordinates}->{$airman->subordinateid} = {
+	    name => [
+		$airman->subfirstname,
+		$airman->submiddlename,
+		$airman->sublastname
+	    ]
+	};
+    }
     $self->render(status => $status, openapi => $userData);
 }
     
-	
+sub infoOfSubordinate {
+    my $self = shift->openapi->valid_input or return;
+    my $airman = $orm->resultset('TblSubordinate')
+	->find( $self->param('key') );
+    my $subordinateData = {
+	name => [
+	    $airman->subfirstname,
+	    $airman->submiddlename,
+	    $airman->sublastname
+       ]
+    };
+    $self->render(openapi => $subordinateData);
+}
+
 1;

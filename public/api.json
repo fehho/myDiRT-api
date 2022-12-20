@@ -62,6 +62,44 @@
 		}
 	    }				
 	},
+	"/entity/sub": {
+	    "post": {
+		"x-mojo-to": "person#infoOfSubordinate",
+		"operationId": "getSubInfo",
+		"security": [{"tokenAuthn": []}],
+		"summary": "Gets metadata related to the person",
+		"responses": {
+		    "200": {
+			"description": "Get data on a subordinate",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"name": {
+					    "type": "array"
+					}
+				    }
+				}
+			    }
+			}
+		    },
+		    "418": {
+			"description": "Unsuccessful login",
+			"content": {
+			    "application/json": {
+				"schema": {
+				    "properties": {
+					"reason": {
+					    "type": "string"
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }				
+	},
 	"/health": {
             "get": {
 		"x-mojo-to": "meta#health",
