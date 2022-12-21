@@ -7,3 +7,10 @@ requires 'CHI';
 requires 'Params::Util'; #unlisted dependency of String::RewritePrefix, which itself is a dependancy of CHI
 requires 'MCE::Shared';
 requires 'DBI', '>=1.643';
+requires 'DBD::ODBC';
+
+feature "schema", "Deploy schema to ORM" => sub {
+    requires 'DBIx::Class::Schema::Loader';
+    requires 'SQL::Translator';
+    requires 'Sub::Name';
+}	 

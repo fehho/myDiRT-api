@@ -2,6 +2,7 @@ package MyApp;
 use Mojo::Base 'Mojolicious', -signatures;
 use MCE::Shared;
 use CHI;
+use MyDirt::Schema;
 # This method will run once at server start
 sub startup ($self) {
 
@@ -12,7 +13,7 @@ sub startup ($self) {
   ));
 
   # Load configuration from config file
-  my $config = $self->plugin('JSONConfig');
+  our $config = MCE::Shared->share( $self->plugin('JSONConfig') );
   $self->plugin(OpenAPI => {
     spec => $self->static->file("api.json")->path,
     security => {

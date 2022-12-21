@@ -21,11 +21,17 @@ $t->post_ok('/api/check_token', form => { token => "phonytoken" })
 $t->post_ok('/api/check_token', form => { token => $token })
 ->status_is(200);
 
-$t->post_ok('/api/entity', form => { token => $token })
+my $sub = $t->post_ok('/api/entity', form => { token => $token })
 ->status_is(200)
 ->json_has('/name')
 ->json_has('/rank')
 ->json_has('/subordinates')
-->json_has('/documents');
+->json_has('/documents')->tx->res->json->{subordinates};
+
+$t->post_ok('/api/entity/sub', form => {
+    token => $token,
+    key => (keys %{$sub})[0]
+})->status_is(200)
+->json_has('/name');
 
 done_testing();
