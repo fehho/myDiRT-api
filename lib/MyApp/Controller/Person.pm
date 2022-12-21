@@ -94,13 +94,13 @@ Takes a token and returns some information about the user that token belongs to,
     $userData->{rank}         = $user->rankid->ranktype;
     $userData->{documents}    = $user->tbl_xref_user_docs->count;
     $userData->{subordinates} = {};
-    for($user->subordinateid->all){
+    for($user->tbl_user_subordinates_userids->all){
 	my $airman = $_->subordinateid;
-	$userData->{subordinates}->{$airman->subordinateid} = {
+	$userData->{subordinates}->{$airman->userid} = {
 	    name => [
-		$airman->subfirstname,
-		$airman->submiddlename,
-		$airman->sublastname
+		$airman->userfirstname,
+		$airman->usermiddlename,
+		$airman->userlastname
 	    ]
 	};
     }
@@ -109,18 +109,18 @@ Takes a token and returns some information about the user that token belongs to,
     
 sub infoOfSubordinate {
     my $self = shift->openapi->valid_input or return;
-    my $airman = $orm->resultset('TblUserSubordinate')
+    my $airman = $orm->resultset('TblUser')
 	->find( $self->param('key') );
     my $callingUser = $cache->get($self->param('token'));
     my $status;
     my $response;
-    if( $airman and $airman->tbl_xref_user_subordinates
+    if( $airman and $airman->tbl_user_subordinates_subordinateids
 	->search({ userid => $callingUser }) ){
 	$response = {
 	    name => [
-		$airman->subfirstname,
-		$airman->submiddlename,
-		$airman->sublastname
+		$airman->userfirstname,
+		$airman->usermiddlename,
+		$airman->userlastname
 	    ]
 	};
 	$status = 200;
