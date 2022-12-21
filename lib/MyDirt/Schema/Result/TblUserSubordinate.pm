@@ -1,12 +1,12 @@
 use utf8;
-package MyDirt::Schema::Result::TblLogin;
+package MyDirt::Schema::Result::TblUserSubordinate;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-MyDirt::Schema::Result::TblLogin
+MyDirt::Schema::Result::TblUserSubordinate
 
 =cut
 
@@ -15,11 +15,11 @@ use warnings;
 
 use base 'DBIx::Class::Core';
 
-=head1 TABLE: C<tblLogin>
+=head1 TABLE: C<tblUserSubordinates>
 
 =cut
 
-__PACKAGE__->table("tblLogin");
+__PACKAGE__->table("tblUserSubordinates");
 
 =head1 ACCESSORS
 
@@ -29,42 +29,37 @@ __PACKAGE__->table("tblLogin");
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 userloginid
+=head2 subordinateid
 
-  data_type: 'varchar'
+  data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 0
-  size: 15
-
-=head2 userpassword
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 20
 
 =cut
 
 __PACKAGE__->add_columns(
   "userid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "userloginid",
-  { data_type => "varchar", is_nullable => 0, size => 15 },
-  "userpassword",
-  { data_type => "varchar", is_nullable => 0, size => 20 },
+  "subordinateid",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
 
-=head1 PRIMARY KEY
+=head1 RELATIONS
 
-=over 4
+=head2 subordinateid
 
-=item * L</userid>
+Type: belongs_to
 
-=back
+Related object: L<MyDirt::Schema::Result::TblUser>
 
 =cut
 
-__PACKAGE__->set_primary_key("userid");
-
-=head1 RELATIONS
+__PACKAGE__->belongs_to(
+  "subordinateid",
+  "MyDirt::Schema::Result::TblUser",
+  { userid => "subordinateid" },
+  { is_deferrable => 1, on_delete => "NO ACTION", on_update => "NO ACTION" },
+);
 
 =head2 userid
 
@@ -82,8 +77,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2022-12-21 10:21:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lfdxfx+XNTK1pJ62cz6n9A
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2022-12-21 11:04:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L3HsRsO8npC/dlAE69CN7Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

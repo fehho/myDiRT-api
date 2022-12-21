@@ -71,6 +71,11 @@ __PACKAGE__->table("tblUser");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 issubordinate
+
+  data_type: 'bit'
+  is_nullable: 1
+
 =head2 rankid
 
   data_type: 'integer'
@@ -100,6 +105,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "organizationid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "issubordinate",
+  { data_type => "bit", is_nullable => 1 },
   "rankid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
 );
@@ -178,6 +185,36 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 tbl_user_subordinates_subordinateids
+
+Type: has_many
+
+Related object: L<MyDirt::Schema::Result::TblUserSubordinate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tbl_user_subordinates_subordinateids",
+  "MyDirt::Schema::Result::TblUserSubordinate",
+  { "foreign.subordinateid" => "self.userid" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 tbl_user_subordinates_userids
+
+Type: has_many
+
+Related object: L<MyDirt::Schema::Result::TblUserSubordinate>
+
+=cut
+
+__PACKAGE__->has_many(
+  "tbl_user_subordinates_userids",
+  "MyDirt::Schema::Result::TblUserSubordinate",
+  { "foreign.userid" => "self.userid" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 tbl_xref_user_docs
 
 Type: has_many
@@ -193,24 +230,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 tbl_xref_user_subordinates
 
-Type: has_many
-
-Related object: L<MyDirt::Schema::Result::TblXrefUserSubordinate>
-
-=cut
-
-__PACKAGE__->has_many(
-  "tbl_xref_user_subordinates",
-  "MyDirt::Schema::Result::TblXrefUserSubordinate",
-  { "foreign.userid" => "self.userid" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2022-12-19 11:52:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hWUVEC2fQ7ARixSBExpm2g
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2022-12-21 11:04:12
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2bKIeoE9gJdGo3QxEblkpw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

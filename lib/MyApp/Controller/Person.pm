@@ -94,7 +94,7 @@ Takes a token and returns some information about the user that token belongs to,
     $userData->{rank}         = $user->rankid->ranktype;
     $userData->{documents}    = $user->tbl_xref_user_docs->count;
     $userData->{subordinates} = {};
-    for($user->tbl_xref_user_subordinates->all){
+    for($user->subordinateid->all){
 	my $airman = $_->subordinateid;
 	$userData->{subordinates}->{$airman->subordinateid} = {
 	    name => [
@@ -109,7 +109,7 @@ Takes a token and returns some information about the user that token belongs to,
     
 sub infoOfSubordinate {
     my $self = shift->openapi->valid_input or return;
-    my $airman = $orm->resultset('TblSubordinate')
+    my $airman = $orm->resultset('TblUserSubordinate')
 	->find( $self->param('key') );
     my $callingUser = $cache->get($self->param('token'));
     my $status;
