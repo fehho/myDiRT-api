@@ -9,7 +9,14 @@ requires 'MCE::Shared';
 requires 'DBI', '>=1.643';
 requires 'DBD::ODBC';
 
-feature "schema", "Deploy schema to ORM" => sub {
+on 'test' => sub {
+    requires 'Test::More';
+    requires 'Test::Mojo';
+    requires 'Devel::Cover';
+    requires 'Pod::Coverage';
+}
+
+feature 'schema', 'Deploy schema to ORM' => sub {
     requires 'DBIx::Class::Schema::Loader';
     requires 'SQL::Translator';
     requires 'Sub::Name';
