@@ -1,4 +1,4 @@
-package MyApp;
+package MyDirt;
 use Mojo::Base 'Mojolicious', -signatures;
 use MCE::Shared;
 use CHI;

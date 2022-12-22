@@ -1,4 +1,4 @@
-package MyApp::Controller::Meta;
+package MyDirt::Controller::Meta;
 use Mojo::Base "Mojolicious::Controller";
 use Mojo::JSON qw(decode_json encode_json);
 

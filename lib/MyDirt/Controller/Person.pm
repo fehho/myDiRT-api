@@ -1,4 +1,4 @@
-package MyApp::Controller::Person;
+package MyDirt::Controller::Person;
 use Mojo::Base "Mojolicious::Controller";
 use Crypt::Passphrase;
 use Crypt::Passphrase::Argon2;
@@ -17,7 +17,7 @@ my $auth = Crypt::Passphrase->new(
     )
 );
 
-my $config = $MyApp::config;
+my $config = $MyDirt::config;
 
 my $orm = MyDirt::Schema->connect(
         $config->{mssql}->{dbstring},
@@ -30,7 +30,7 @@ my $tokens = Session::Token->new();
 
 my $static = $auth->hash_password("baba booey");
 
-my $cache = $MyApp::cache;
+my $cache = $MyDirt::cache;
 
 sub login {
 
