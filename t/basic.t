@@ -3,7 +3,7 @@ use Mojo::Base -strict;
 use Test::More;
 use Test::Mojo;
 
-my $t = Test::Mojo->new('MyApp');
+my $t = Test::Mojo->new('MyDirt');
 
 $t->get_ok('/api/health')->status_is(200)->json_is({status => "🙂"});
 
