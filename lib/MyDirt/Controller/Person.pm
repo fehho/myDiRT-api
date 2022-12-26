@@ -54,7 +54,7 @@ Checks that credentials contained inside of body params belong to a user, and if
             # all workers will likely start with the same seed upon spawning
         }
         $response->{token} = $unique;
-        $cache->set( $response->{token}, 2 );
+        $cache->set( $response->{token}, $orm->resultset('TblUser')->first->userid );
     }
     else {
         $status = 418;
@@ -85,7 +85,7 @@ Takes a token and returns some information about the user that token belongs to,
     my $self     = shift;
     my $userData = {};
     my $status   = 200;
-    my $user     = $orm->resultset('TblUser')->find(2);
+    my $user     = $orm->resultset('TblUser')->find( $cache->get( $self->param('token') ) );
     $userData->{name} =
       [ $user->userfirstname, $user->usermiddlename, $user->userlastname ];
     $userData->{rank}         = $user->rankid->ranktype;

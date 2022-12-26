@@ -1,0 +1,28 @@
+#! perl
+use warnings;
+use strict;
+use DBI;
+
+use Mojolicious::Lite;
+use Mojo::File qw(curfile);
+use lib curfile->dirname->sibling('lib')->to_string;
+my $conf = curfile->dirname->sibling('my_dirt.json');
+my $config = plugin 'JSONConfig' => { file => $conf };
+
+
+#my $dbh = DBI->connect("dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Server=localhost,1433;TrustServerCertificate=yes", 'SA', 'Passw0rd', { RaiseError => 1 });
+#my $dsn = "$driver;Server=$host;OUP-DEV-DEAN\MSSQLSERVER01;initial catalog=MyDirtDB;trusted_connection=yes;TrustServerCertificate=yes;";
+
+use MyDirt::Schema;
+use DBICx::Deploy;
+
+my $deploy = DBICx::Deploy->deploy(
+    'MyDirt::Schema' =>
+        $config->{mssql}->{dbstring},
+        $config->{mssql}->{username},
+        $config->{mssql}->{password},
+        { RaiseError => 1 }
+);
+#my $schema = MyDirt::Schema->connect(
+use Data::Dumper;
+print $deploy;

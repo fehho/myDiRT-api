@@ -5,7 +5,7 @@ use DBI;
 use feature 'say';
 use Mojolicious::Lite;
 use Mojo::File qw(curfile);
-my $conf = curfile->dirname->path('../my_app.json');
+my $conf = curfile->dirname->path('../my_dirt.json');
 my $config = plugin 'JSONConfig' => { file => $conf };
 use lib curfile->dirname->sibling('lib')->to_string;
 use MyDirt::Schema;
@@ -17,16 +17,33 @@ my $orm = MyDirt::Schema->connect(
         { RaiseError => 1 }
 );
 
-#my $snuffy = $orm->resultset('TblUser')->create({
-#     userfirstname => 'Airman',
-#     usermiddlename => 'Onesee',
-#     userlastname => 'Snuffy',
-#     useremail => 'airman.snuffy@us.af.mil',
-#     roleid => 1,
-#     organizationid => 1,
-#     rankid => 1
-#});
-
+my $org = $orm->resultset('TblOrg')->create({
+    orgid   => '0',
+    orgname => '705 Mil Police Bn',
+});
+my @ranks = qw/ AB Amn A1C SrA SSgt TSgt MSgt SMSgt CMSgt /;
+push @ranks, ('2d Lt', '1st Lt', 'Capt', 'Maj', 'Lt Col', 'Col', 'Brig Gen', 'Maj Gen', 'Lt Gen', 'Gen');
+my $i = 0;
+$orm->resultset('TblRank')->create({ rankid => $i++, ranktype => $_ }) for @ranks;
+$orm->resultset('TblRole')->create({ roleid => 0, roletype => 'big A Airman' });
+my $snuffy = $orm->resultset('TblUser')->create({
+     userfirstname => 'Airman',
+     usermiddlename => 'Onesee',
+     userlastname => 'Snuffy',
+     useremail => 'airman.snuffy@us.af.mil',
+     roleid => 0,
+     organizationid => 1,
+     rankid => 1
+});
+my $nuffy = $orm->resultset('TblUser')->create({
+     userfirstname => 'Airman',
+     usermiddlename => 'Onesee',
+     userlastname => 'Nuffy',
+     useremail => 'airman.nuffy@us.af.mil',
+     roleid => 0,
+     organizationid => 1,
+     rankid => 3
+});
 my $users = $orm->resultset('TblUser');
 $orm->resultset('TblUserSubordinate')->create({
     userid => $users->next,
