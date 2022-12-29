@@ -10,6 +10,14 @@ my $config = plugin 'JSONConfig' => { file => $conf };
 use lib curfile->dirname->sibling('lib')->to_string;
 use MyDirt::Schema;
 
+use Crypt::Passphrase;
+use Crypt::Passphrase::Argon2;
+my $auth = Crypt::Passphrase->new(
+    encoder => Crypt::Passphrase::Argon2->new(
+        time_cost => 1
+    )
+);
+
 my $orm = MyDirt::Schema->connect(
         $config->{mssql}->{dbstring},
         $config->{mssql}->{username},
@@ -17,15 +25,15 @@ my $orm = MyDirt::Schema->connect(
         { RaiseError => 1 }
 );
 
-my $org = $orm->resultset('TblOrg')->create({
+my $org = $orm->resultset('TblOrg')->find_or_create({
     orgid   => '0',
     orgname => '705 Mil Police Bn',
 });
 my @ranks = qw/ AB Amn A1C SrA SSgt TSgt MSgt SMSgt CMSgt /;
 push @ranks, ('2d Lt', '1st Lt', 'Capt', 'Maj', 'Lt Col', 'Col', 'Brig Gen', 'Maj Gen', 'Lt Gen', 'Gen');
 my $i = 0;
-$orm->resultset('TblRank')->create({ rankid => $i++, ranktype => $_ }) for @ranks;
-$orm->resultset('TblRole')->create({ roleid => 0, roletype => 'big A Airman' });
+$orm->resultset('TblRank')->find_or_create({ rankid => $i++, ranktype => $_ }) for @ranks;
+$orm->resultset('TblRole')->find_or_create({ roleid => 0, roletype => 'big A Airman' });
 my $snuffy = $orm->resultset('TblUser')->create({
      userfirstname => 'Airman',
      usermiddlename => 'Onesee',
@@ -46,6 +54,16 @@ my $nuffy = $orm->resultset('TblUser')->create({
 });
 my $users = $orm->resultset('TblUser');
 $orm->resultset('TblUserSubordinate')->create({
-    userid => $users->next,
-    subordinateid => $users->next
+    userid => $snuffy,
+    subordinateid => $nuffy
+});
+$orm->resultset('TblLogin')->create({
+    userid => $snuffy,
+    userloginid =>  'snuffy',
+    userpassword => $auth->hash_password('baba booey')
+});
+$orm->resultset('TblLogin')->create({
+    userid => $nuffy,
+    userloginid =>  'nuffy',
+    userpassword => $auth->hash_password('123456')
 });

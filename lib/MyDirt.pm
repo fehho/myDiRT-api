@@ -18,7 +18,8 @@ sub startup ($self) {
     # Load configuration from config file
     our $config = MCE::Shared->share( $self->plugin('JSONConfig') );
     $self->plugin(
-        OpenAPI => {
+	OpenAPI => {
+	    add_preflighted_routes => 0,
             spec     => $self->static->file("api.json")->path,
             security => {
                 tokenAuthn => sub {
@@ -37,8 +38,17 @@ sub startup ($self) {
         }
     );
 
+    $self->defaults(openapi_cors_default_exchange_callback => sub ($c) {
+	$c->res->headers->header("Access-Control-Allow-Origin" => "*");
+	$c->res->headers->header("Access-Control-Allow-Headers" => 'Content-Type' => 'application/x-www-form-urlencoded');
+        return undef;
+    });
     # Configure the application
     $self->secrets( $config->{secrets} );
+    $self->hook(before_dispatch => sub ($c) {
+	$c->res->headers->access_control_allow_origin('*');
+#	$c->res->headers->access_control_allow_header('*');
+    });
 }
 
 1;

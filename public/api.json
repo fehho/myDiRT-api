@@ -158,7 +158,7 @@
 				"properties": {
 				    "pass": {
 					"type": "string",
-					"minLength": 8
+					"minLength": 6
 				    }
 				},
 				"required": [ "pass" ]

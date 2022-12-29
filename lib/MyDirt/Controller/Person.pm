@@ -26,7 +26,7 @@ my $orm = MyDirt::Schema->connect(
 
 my $tokens = Session::Token->new();
 
-my $static = $auth->hash_password("baba booey");
+my $blank = $auth->hash_password(''); #for anti-timing attack
 
 my $cache = $MyDirt::cache;
 
@@ -40,7 +40,10 @@ Checks that credentials contained inside of body params belong to a user, and if
 
     my $response = {};
     my $status   = 200;
-    if ( $auth->verify_password( $self->param('pass'), $static ) ) {
+    my $username = $self->param('user');
+    my $user = $orm->resultset('TblLogin')->find({userloginid => $username});
+    my $hash = $user->userpassword;
+    if ( $auth->verify_password( $self->param('pass'), $hash ) ) {
         $status = 200;
         my $unique;
         until ($unique) {
@@ -54,7 +57,8 @@ Checks that credentials contained inside of body params belong to a user, and if
             # all workers will likely start with the same seed upon spawning
         }
         $response->{token} = $unique;
-        $cache->set( $response->{token}, $orm->resultset('TblUser')->first->userid );
+        $cache->set( $response->{token}, $user->userid->userid );
+	$response->{debug} = $user->userid->userid;
     }
     else {
         $status = 418;
@@ -91,7 +95,13 @@ Takes a token and returns some information about the user that token belongs to,
     $userData->{rank}         = $user->rankid->ranktype;
     $userData->{documents}    = $user->tbl_xref_user_docs->count;
     $userData->{subordinates} = {};
-
+    my $supervisor = $user->tbl_user_subordinates_subordinateids->first->userid;
+    if( $supervisor ){
+        $userData->{supervisor} = $supervisor->userlastname;
+      } else {
+	$userData->{supervisor} = 'No supervisor';
+      }
+    $userData->{org} = $user->organizationid->orgname;
     for ( $user->tbl_user_subordinates_userids->all ) {
         my $airman = $_->subordinateid;
         $userData->{subordinates}->{ $airman->userid } = {
