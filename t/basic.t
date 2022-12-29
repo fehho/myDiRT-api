@@ -11,11 +11,12 @@ $t->post_ok('/api/get_token', form => { user => 'somebody@example.org', pass => 
 
 $t->post_ok('/api/get_token', form => {}, 'empty form')->status_is(400);
 my $token = $t->post_ok('/api/get_token', form =>
-   { user => 'somebody@example.org', pass => 'baba booey' }
+   { user => 'snuffy', pass => 'baba booey' }
 )->status_is(200)
 ->json_has('/token', 'got a token with good creds')
 ->tx->res->json->{token};
-
+use feature 'say';
+say $token;
 $t->post_ok('/api/check_token', form => { token => "phonytoken" })
 ->status_is(401);
 $t->post_ok('/api/check_token', form => { token => $token })

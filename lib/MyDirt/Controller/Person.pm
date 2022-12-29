@@ -95,9 +95,9 @@ Takes a token and returns some information about the user that token belongs to,
     $userData->{rank}         = $user->rankid->ranktype;
     $userData->{documents}    = $user->tbl_xref_user_docs->count;
     $userData->{subordinates} = {};
-    my $supervisor = $user->tbl_user_subordinates_subordinateids->first->userid;
+    my $supervisor = $user->tbl_user_subordinates_userids->first;
     if( $supervisor ){
-        $userData->{supervisor} = $supervisor->userlastname;
+        $userData->{supervisor} = $supervisor->userid->userlastname;
       } else {
 	$userData->{supervisor} = 'No supervisor';
       }
