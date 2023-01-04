@@ -22,7 +22,7 @@ my $orm = MyDirt::Schema->connect(
         $config->{mssql}->{dbstring},
         $config->{mssql}->{username},
         $config->{mssql}->{password},
-        { RaiseError => 1 }
+	{ RaiseError => 1, LongReadLen => 99999, LongTruncOk => 1 }
 );
 
 my $org = $orm->resultset('TblOrg')->find_or_create({
@@ -75,11 +75,19 @@ undef $dir;
 undef @filenames;
 
 my $doctypes = $orm->resultset('TblDocType');
-my $loc = $doctypes->find_or_create({
+my $loc;
+
+$doctypes->find_or_create({
+    doctypeid => 682,
+    doctypename => 'AETC Form 682',
+    doctemplate => $templates{aetc341}
+});
+$doctypes->find_or_create({
     doctypeid => 174,
     doctypename => 'LOC',
     doctemplate => $templates{LOCAR}
 });
+$loc = 174;
 $doctypes->find_or_create({
     doctypeid => 175,
     doctypename => 'LOA',
