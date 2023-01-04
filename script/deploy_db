@@ -8,7 +8,10 @@ use Mojo::File qw(curfile);
 use lib curfile->dirname->sibling('lib')->to_string;
 my $conf = curfile->dirname->sibling('my_dirt.json');
 my $config = plugin 'JSONConfig' => { file => $conf };
-
+use Env qw(DIRT_DB_CONSTRING DIRT_DB_USER DIRT_DB_PASS);
+$config->{mssql}->{dbstring} = $DIRT_DB_CONSTRING if $DIRT_DB_CONSTRING;
+$config->{mssql}->{username} = $DIRT_DB_USER if $DIRT_DB_USER;
+$config->{mssql}->{password} = $DIRT_DB_PASS if $DIRT_DB_PASS;
 
 #my $dbh = DBI->connect("dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Server=localhost,1433;TrustServerCertificate=yes", 'SA', 'Passw0rd', { RaiseError => 1 });
 #my $dsn = "$driver;Server=$host;OUP-DEV-DEAN\MSSQLSERVER01;initial catalog=MyDirtDB;trusted_connection=yes;TrustServerCertificate=yes;";
