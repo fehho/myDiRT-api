@@ -68,11 +68,39 @@ $orm->resultset('TblLogin')->create({
     userpassword => $auth->hash_password('123456')
 });
 
-my $loc = $orm->resultset('TblDocType')->find_or_create({
-    doctypeid => 0000174,
+my $dir = curfile->dirname->path('../public/form_templates/');
+my @filenames = qw(aetc341 af3070a LOCAR);
+my %templates = map {$_, $dir->path("${_}.pdf")->slurp} @filenames;
+undef $dir;
+undef @filenames;
+
+my $doctypes = $orm->resultset('TblDocType');
+my $loc = $doctypes->find_or_create({
+    doctypeid => 174,
     doctypename => 'LOC',
-    doctemplate => ''
+    doctemplate => $templates{LOCAR}
 });
+$doctypes->find_or_create({
+    doctypeid => 175,
+    doctypename => 'LOA',
+    doctemplate => $templates{LOCAR}
+});
+$doctypes->find_or_create({
+    doctypeid => 176,
+    doctypename => 'LOR',
+    doctemplate => $templates{LOCAR}
+});
+$doctypes->find_or_create({
+    doctypeid => 341,
+    doctypename => 'AETC Form 341',
+    doctemplate => $templates{aetc341}
+});
+$doctypes->find_or_create({
+    doctypeid => 307,
+    doctypename => 'Article 15',
+    doctemplate => $templates{af3070a}
+});
+
 my $snuffyLOC = $orm->resultset('TblDoc')->create({
     doctypeid => $loc,
     docwhere  => 'Tinker AFB',

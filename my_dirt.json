@@ -5,6 +5,6 @@
     "mssql": {
 	"dbstring":  "dbi:ODBC:Driver=ODBC Driver 18 for SQL Server;Database=MyDirtDB;Server=localhost,1433;TrustServerCertificate=yes", 
 	"username": "SA",
-	"password": "Passw0rd?"
+	"password": "Passw0rd"
     }
 }
