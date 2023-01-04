@@ -15,20 +15,20 @@
 	}
     },
     "paths": {
-	"/health/{worker}": {
+	"/listFormTemplates": {
 	    "get": {
-		"x-mojo-to": "meta#health",
-		"operationId": "getHealthOf",
-		"summary": "Get health of a specifc worker",
+		"x-mojo-to": "doc#getTypeList",
+		"operationId": "getTemplates",
+		"summary": "Get a metadata object for every template available",
 		"responses": {
 		    "200": {
-			"description": "It's a smiley face",
+			"description": "Success",
 			"content": {
 			    "application/json": {
 				"schema": {
 				    "properties": {
-					"face": {
-					    "type": "string"
+					"templates": {
+					    "type": "array"
 					}
 				    }
 				}
@@ -38,44 +38,129 @@
 		}
 	    }
 	},
-	"/entity": {
-	    "post": {
-		"x-mojo-to": "person#info",
-		"operationId": "getInfo",
-		"security": [{"tokenAuthn": []}],
+	"/health/{worker}": {
+		"get": {
+		    "x-mojo-to": "meta#health",
+		    "operationId": "getHealthOf",
+		    "summary": "Get health of a specifc worker",
+		    "responses": {
+			"200": {
+			    "description": "It's a smiley face",
+			    "content": {
+				"application/json": {
+				    "schema": {
+					"properties": {
+					    "face": {
+						"type": "string"
+					    }
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    },
+	    "/entity": {
+		"post": {
+		    "x-mojo-to": "person#info",
+		    "operationId": "getInfo",
+		    "security": [{"tokenAuthn": []}],
+		    "summary": "Gets metadata related to the person",
+		    "responses": {
+			"200": {
+			    "description": "Get name parts, rank, and who user has permissions to.",
+			    "content": {
+				"application/json": {
+				    "schema": {
+					"properties": {
+					    "name": {
+						"type": "array"
+					    },
+					    "rank": {
+						"type": "string"
+					    },
+					    "subordinates": {
+						"type": "object"
+					    },
+					    "documents": {
+						"type": "array"
+					    }
+					}
+				    }
+				}
+			    }
+			},
+			"418": {
+			    "description": "Unsuccessful login",
+			    "content": {
+				"application/json": {
+				    "schema": {
+					"properties": {
+					    "reason": {
+						"type": "string"
+					    }
+					}
+				    }
+				}
+			    }
+			}
+		    }
+		}				
+	    },
+	    "/entity/sub": {
+		"post": {
+		    "x-mojo-to": "person#infoOfSubordinate",
+		    "operationId": "getSubInfo",
+		    "security": [{"tokenAuthn": []}],
 		"summary": "Gets metadata related to the person",
-		"responses": {
-		    "200": {
-			"description": "Get name parts, rank, and who user has permissions to.",
-			"content": {
-			    "application/json": {
-				"schema": {
-				    "properties": {
-					"name": {
-					    "type": "array"
-					},
-					"rank": {
-					    "type": "string"
-					},
-					"subordinates": {
-					    "type": "object"
-					},
-					"documents": {
-					    "type": "array"
+		    "responses": {
+			"200": {
+			    "description": "Get data on a subordinate",
+			    "content": {
+				"application/json": {
+				    "schema": {
+					"properties": {
+					    "name": {
+						"type": "array"
+					    }
+					}
+				    }
+				}
+			    }
+			},
+			"418": {
+			    "description": "Unsuccessful login",
+			    "content": {
+				"application/json": {
+				    "schema": {
+					"properties": {
+					    "reason": {
+						"type": "string"
+					    }
 					}
 				    }
 				}
 			    }
 			}
-		    },
-		    "418": {
-			"description": "Unsuccessful login",
-			"content": {
-			    "application/json": {
-				"schema": {
-				    "properties": {
-					"reason": {
-					    "type": "string"
+		    }
+		}				
+	    },
+	    "/health": {
+		"get": {
+		    "x-mojo-to": "meta#health",
+		    "operationId": "hello",
+		    "summary": "Get a smiley face",
+		    "responses": {
+			"200": {
+			    "description": "It's a smiley face",
+			    "content": {
+				"application/json": {
+				    "schema": {
+					"properties": {
+					    "face": {
+						"type": "string"
+					    }
 					}
 				    }
 				}
@@ -83,79 +168,17 @@
 			}
 		    }
 		}
-	    }				
-	},
-	"/entity/sub": {
-	    "post": {
-		"x-mojo-to": "person#infoOfSubordinate",
-		"operationId": "getSubInfo",
-		"security": [{"tokenAuthn": []}],
-		"summary": "Gets metadata related to the person",
-		"responses": {
-		    "200": {
-			"description": "Get data on a subordinate",
+	    },
+	    "/get_token": {
+		"post": {
+		    "x-mojo-to": "person#login",
+		    "operationId": "getToken",
+		    "requestBody": {
+			"required": true,
 			"content": {
-			    "application/json": {
+			    "application/x-www-form-urlencoded": {
 				"schema": {
 				    "properties": {
-					"name": {
-					    "type": "array"
-					}
-				    }
-				}
-			    }
-			}
-		    },
-		    "418": {
-			"description": "Unsuccessful login",
-			"content": {
-			    "application/json": {
-				"schema": {
-				    "properties": {
-					"reason": {
-					    "type": "string"
-					}
-				    }
-				}
-			    }
-			}
-		    }
-		}
-	    }				
-	},
-	"/health": {
-            "get": {
-		"x-mojo-to": "meta#health",
-		"operationId": "hello",
-		"summary": "Get a smiley face",
-		"responses": {
-		    "200": {
-			"description": "It's a smiley face",
-			"content": {
-			    "application/json": {
-				"schema": {
-				    "properties": {
-					"face": {
-					    "type": "string"
-					}
-				    }
-				}
-			    }
-			}
-		    }
-		}
-	    }
-	},
-	"/get_token": {
-	    "post": {
-		"x-mojo-to": "person#login",
-		"operationId": "getToken",
-		"requestBody": {
-		    "required": true,
-		    "content": {
-			"application/x-www-form-urlencoded": {
-			    "schema": {
-				"properties": {
 				    "pass": {
 					"type": "string",
 					"minLength": 6
