@@ -8,7 +8,7 @@ my $config = $MyDirt::config;
 
 my $orm = MyDirt::Schema->connect(
     $config->{mssql}->{dbstring}, $config->{mssql}->{username},
-    $config->{mssql}->{password}, { RaiseError => 1 }
+    $config->{mssql}->{password}, { RaiseError => 1, LongReadLen => 4294967295 }
 );
 
 my $cache = $MyDirt::cache;
@@ -28,6 +28,9 @@ sub getTypeList {
 sub getTemplate {
     my $self = shift->openapi->valid_input or return;
 
-    $self->render( openapi => '' );
+    my $id = $self->param('docid');
+    my $doc = $orm->resultset('TblDocType')->find( $id );
+
+    $self->render( data => $doc->doctemplate, format => 'pdf' );
 }
 1;

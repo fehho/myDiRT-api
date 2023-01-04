@@ -22,7 +22,7 @@ my $orm = MyDirt::Schema->connect(
         $config->{mssql}->{dbstring},
         $config->{mssql}->{username},
         $config->{mssql}->{password},
-	{ RaiseError => 1, LongReadLen => 99999, LongTruncOk => 1 }
+	{ RaiseError => 1, LongReadLen => 4294967295, LongTruncOk => 0 }
 );
 
 my $org = $orm->resultset('TblOrg')->find_or_create({

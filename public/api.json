@@ -259,6 +259,21 @@
 		    }	   
 		}
 	    }
+	},
+	"/download/template/{docid}": {
+	    "get": {
+		"x-mojo-to": "doc#getTemplate",
+		"operationId": "getTemplateById",
+		"summary": "Get a template using an id",
+		"responses": {
+		    "200": {
+			"description": "Success",
+			"content": {
+			    "application/pdf": { }
+			}
+		    }
+		}
+	    }
 	}
     },
     "servers": [
