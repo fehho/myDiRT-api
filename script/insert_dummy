@@ -26,8 +26,8 @@ my $orm = MyDirt::Schema->connect(
 );
 
 my $org = $orm->resultset('TblOrg')->find_or_create({
-    orgid   => '0',
-    orgname => '705 Mil Police Bn',
+    orgid   => '55200',
+    orgname => '552nd ACNS',
 });
 my @ranks = qw/ AB Amn A1C SrA SSgt TSgt MSgt SMSgt CMSgt /;
 push @ranks, ('2d Lt', '1st Lt', 'Capt', 'Maj', 'Lt Col', 'Col', 'Brig Gen', 'Maj Gen', 'Lt Gen', 'Gen');
@@ -40,7 +40,7 @@ my $snuffy = $orm->resultset('TblUser')->create({
      userlastname => 'Snuffy',
      useremail => 'airman.snuffy@us.af.mil',
      roleid => 0,
-     organizationid => 1,
+     organizationid => $org,
      rankid => 1
 });
 my $nuffy = $orm->resultset('TblUser')->create({
@@ -49,7 +49,7 @@ my $nuffy = $orm->resultset('TblUser')->create({
      userlastname => 'Nuffy',
      useremail => 'airman.nuffy@us.af.mil',
      roleid => 0,
-     organizationid => 1,
+     organizationid => $org,
      rankid => 3
 });
 my $users = $orm->resultset('TblUser');
@@ -59,11 +59,26 @@ $orm->resultset('TblUserSubordinate')->create({
 });
 $orm->resultset('TblLogin')->create({
     userid => $snuffy,
-    userloginid =>  'snuffy',
+    userloginid =>  'Luffy',
     userpassword => $auth->hash_password('baba booey')
 });
 $orm->resultset('TblLogin')->create({
     userid => $nuffy,
-    userloginid =>  'nuffy',
+    userloginid =>  'Buffy',
     userpassword => $auth->hash_password('123456')
+});
+
+my $loc = $orm->resultset('TblDocType')->find_or_create({
+    doctypeid => 0000174,
+    doctypename => 'LOC',
+    doctemplate => ''
+});
+my $snuffyLOC = $orm->resultset('TblDoc')->create({
+    doctypeid => $loc,
+    docwhere  => 'Tinker AFB',
+    doc       => ''
+});
+$orm->resultset('TblXrefUserDoc')->create({
+    userid => $snuffy,
+    docid => $snuffyLOC
 });

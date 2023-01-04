@@ -5,7 +5,7 @@ use Crypt::Passphrase::Argon2;
 use Session::Token;
 use DBI;
 use MyDirt::Schema;
-
+use feature qw(postderef);
 =head1 Person.pm - Controller for actions about a person and their data
 Anything that is about individual, plus any persons above and below, go here.
 
@@ -93,15 +93,29 @@ Takes a token and returns some information about the user that token belongs to,
     $userData->{name} =
       [ $user->userfirstname, $user->usermiddlename, $user->userlastname ];
     $userData->{rank}         = $user->rankid->ranktype;
-    $userData->{documents}    = $user->tbl_xref_user_docs->count;
-    $userData->{subordinates} = {};
-    my $supervisor = $user->tbl_user_subordinates_userids->first;
-    if( $supervisor ){
-        $userData->{supervisor} = $supervisor->userid->userlastname;
-      } else {
-	$userData->{supervisor} = 'No supervisor';
-      }
+    $userData->{documents}    = [];
     $userData->{org} = $user->organizationid->orgname;
+    for my $doc ( $user->tbl_xref_user_docs ) {
+        $doc = $doc->docid;
+        my $docMeta = {
+            Type  => $doc->doctypeid->doctypename,
+	    Date  => 1672781365,
+	    Unit  => $userData->{org},
+	    Where => $doc->docwhere,
+	    docid => $doc->docid
+	};
+        push $userData->{documents}->@*, $docMeta;
+    }
+    $userData->{subordinates} = {};
+    my $supervisor = $user->tbl_user_subordinates_subordinateids->first;
+    if( $supervisor ){
+        $userData->{supervisor} =
+	    $supervisor->userid->rankid->ranktype.
+	    " ".
+            $supervisor->userid->userlastname
+    } else {
+	$userData->{supervisor} = 'No supervisor';
+    }
     for ( $user->tbl_user_subordinates_userids->all ) {
         my $airman = $_->subordinateid;
         $userData->{subordinates}->{ $airman->userid } = {
