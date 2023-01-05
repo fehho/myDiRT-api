@@ -122,7 +122,8 @@ Takes a token and returns some information about the user that token belongs to,
             name => [
                 $airman->userfirstname, $airman->usermiddlename,
                 $airman->userlastname
-            ]
+	    ],
+	    rank => $airman->rankid->ranktype
         };
     }
     $self->render( status => $status, openapi => $userData );
