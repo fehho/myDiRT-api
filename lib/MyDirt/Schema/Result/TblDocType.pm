@@ -32,7 +32,7 @@ __PACKAGE__->table("tblDocTypes");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 20
+  size: 30
 
 =head2 doctemplate
 
@@ -45,7 +45,7 @@ __PACKAGE__->add_columns(
   "doctypeid",
   { data_type => "integer", is_nullable => 0 },
   "doctypename",
-  { data_type => "varchar", is_nullable => 0, size => 20 },
+  { data_type => "varchar", is_nullable => 0, size => 30 },
   "doctemplate",
   { data_type => "image", is_nullable => 0 },
 );
@@ -80,8 +80,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2022-12-21 10:21:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DdisRiDwOzshXLvZMmP2Ow
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2023-01-05 10:49:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IrifYixxEbS40d9BQ2JadA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

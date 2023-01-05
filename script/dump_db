@@ -5,7 +5,7 @@ use DBI;
 
 use Mojolicious::Lite;
 use Mojo::File qw(curfile);
-my $conf = curfile->dirname->path('../my_app.json');
+my $conf = curfile->dirname->path('../my_dirt.json');
 my $config = plugin 'JSONConfig' => { file => $conf };
 use Env qw(DIRT_DB_CONSTRING DIRT_DB_USER DIRT_DB_PASS);
 $config->{mssql}->{dbstring} = $DIRT_DB_CONSTRING if $DIRT_DB_CONSTRING;

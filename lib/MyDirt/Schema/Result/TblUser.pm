@@ -59,6 +59,12 @@ __PACKAGE__->table("tblUser");
   is_nullable: 1
   size: 30
 
+=head2 userphone
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 11
+
 =head2 roleid
 
   data_type: 'integer'
@@ -82,6 +88,12 @@ __PACKAGE__->table("tblUser");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 officesymbol
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 4
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -101,6 +113,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "useremail",
   { data_type => "varchar", is_nullable => 1, size => 30 },
+  "userphone",
+  { data_type => "varchar", is_nullable => 1, size => 11 },
   "roleid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "organizationid",
@@ -109,6 +123,8 @@ __PACKAGE__->add_columns(
   { data_type => "bit", is_nullable => 1 },
   "rankid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "officesymbol",
+  { data_type => "varchar", is_nullable => 1, size => 4 },
 );
 
 =head1 PRIMARY KEY
@@ -231,8 +247,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07051 @ 2022-12-21 11:04:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:2bKIeoE9gJdGo3QxEblkpw
+# Created by DBIx::Class::Schema::Loader v0.07051 @ 2023-01-05 10:49:27
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:KYJldOS5uqE/TT1wnPAGoA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

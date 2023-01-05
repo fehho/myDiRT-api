@@ -21,7 +21,9 @@ my $config = $MyDirt::config;
 
 my $orm = MyDirt::Schema->connect(
     $config->{mssql}->{dbstring}, $config->{mssql}->{username},
-    $config->{mssql}->{password}, { RaiseError => 1 }
+    $config->{mssql}->{password}, { RaiseError => 1, LongReadLen => 4294967295 }
+    #this is to allow getting user documents in getInfo
+    #getInfo doesn't actually need user documents, and they are large files, it would be better to just not get them
 );
 
 my $tokens = Session::Token->new();

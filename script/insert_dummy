@@ -117,7 +117,8 @@ $doctypes->find_or_create({
 my $snuffyLOC = $orm->resultset('TblDoc')->create({
     doctypeid => $loc,
     docwhere  => 'Tinker AFB',
-    doc       => ''
+    doc       => $templates{LOCAR},
+    hashkey   => 'D4F55F21-3ED6-458D-846A-6CAC41606AAF'
 });
 $orm->resultset('TblXrefUserDoc')->create({
     userid => $snuffy,
