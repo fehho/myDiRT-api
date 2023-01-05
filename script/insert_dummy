@@ -38,13 +38,15 @@ my @ranks = qw/ AB Amn A1C SrA SSgt TSgt MSgt SMSgt CMSgt /;
 push @ranks, ('2d Lt', '1st Lt', 'Capt', 'Maj', 'Lt Col', 'Col', 'Brig Gen', 'Maj Gen', 'Lt Gen', 'Gen');
 my $i = 0;
 $orm->resultset('TblRank')->find_or_create({ rankid => $i++, ranktype => $_ }) for @ranks;
-$orm->resultset('TblRole')->find_or_create({ roleid => 0, roletype => 'big A Airman' });
+my $role = $orm->resultset('TblRole')->find_or_create({ roleid => 0, roletype => 'big A Airman' });
 my $snuffy = $orm->resultset('TblUser')->create({
      userfirstname => 'Airman',
      usermiddlename => 'Onesee',
      userlastname => 'Snuffy',
      useremail => 'airman.snuffy@us.af.mil',
-     roleid => 0,
+     officesymbol => 'DOM',
+     userphone => '18005554545',
+     roleid => $role,
      organizationid => $org,
      rankid => 1
 });
@@ -53,6 +55,8 @@ my $nuffy = $orm->resultset('TblUser')->create({
      usermiddlename => 'Onesee',
      userlastname => 'Nuffy',
      useremail => 'airman.nuffy@us.af.mil',
+     officesymbol => 'DOUP',
+     userphone => '6517381234',
      roleid => 0,
      organizationid => $org,
      rankid => 3

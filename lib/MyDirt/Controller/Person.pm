@@ -95,6 +95,8 @@ Takes a token and returns some information about the user that token belongs to,
     $userData->{name} =
       [ $user->userfirstname, $user->usermiddlename, $user->userlastname ];
     $userData->{rank}         = $user->rankid->ranktype;
+    $userData->{phone}        = $user->userphone;
+    $userData->{office}       = $user->officesymbol;
     $userData->{documents}    = [];
     $userData->{org} = $user->organizationid->orgname;
     for my $doc ( $user->tbl_xref_user_docs ) {
