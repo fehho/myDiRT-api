@@ -7,6 +7,7 @@ use DBI;
 use MyDirt::Schema;
 use feature qw(postderef);
 use Try::Catch;
+
 =head1 Person.pm - Controller for actions about a person and their data
 Anything that is about individual, plus any persons above and below, go here.
 
@@ -46,11 +47,10 @@ Checks that credentials contained inside of body params belong to a user, and if
 	my $hash = $user->userpassword if $user;
 	if ( $auth->verify_password( $self->param('pass'), $hash ) ) {
 	    my $unique;
-	    until ($unique) {
+	    for (undef, not $unique, $tokens = Session::Token->new) {
 		my $token = $tokens->get;
 		# uncoverable branch false this should never happen on a single thread
-		$unique = $token and next unless $cache->get($token);
-		$tokens = Session::Token->new;
+		$unique = $token unless $cache->get($token);
 		# reseed this worker's generator
 		# all workers will likely start with the same seed upon spawning
 	    }
@@ -135,32 +135,32 @@ Takes a token and returns some information about the user that token belongs to,
 }
 
 sub infoOfSubordinate {
+
+=head2 infoOfSubordinate
+Takes a token and a user key then returns some information about the user the ID belongs to, if the user is a subordinate of the token owner.
+=cut
+
     my $self        = shift->openapi->valid_input or return;
     my $airman      = $orm->resultset('TblUser')->find( $self->param('key') );
     my $callingUser = $cache->get( $self->param('token') );
-    my $status;
     my $response;
-    if (
-        $airman
-        and $airman->tbl_user_subordinates_subordinateids->search(
+    try {
+        my $check = $airman->tbl_user_subordinates_subordinateids->find(
             { userid => $callingUser }
-        )
-      )
-    {
-        $response = {
+        );
+	$response = {
             name => [
                 $airman->userfirstname, $airman->usermiddlename,
                 $airman->userlastname
             ]
         };
-        $status = 200;
-    }
-    else {
-        $response = { reason =>
+    } catch {
+        $response = { message =>
               'Supplied key does not belong to one of your subordinates' };
-        $status = 418;
+        $self->stash( status => 401 );
+    } finally {
+	$self->render( openapi => $response );
     }
-    $self->render( status => $status, openapi => $response );
 }
 
 1;

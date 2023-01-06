@@ -129,13 +129,13 @@
 				}
 			    }
 			},
-			"418": {
+			"401": {
 			    "description": "Unsuccessful login",
 			    "content": {
 				"application/json": {
 				    "schema": {
 					"properties": {
-					    "reason": {
+					    "message": {
 						"type": "string"
 					    }
 					}

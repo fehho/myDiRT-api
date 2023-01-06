@@ -18,8 +18,14 @@ sub startup ($self) {
     # Load configuration from config file
     my $localconfig = $self->plugin('JSONConfig');
     use Env qw(DIRT_DB_CONSTRING DIRT_DB_USER DIRT_DB_PASS);
+    # uncoverable branch true constant value
+    # uncoverable branch false constant value
     $localconfig->{mssql}->{dbstring} = $DIRT_DB_CONSTRING if $DIRT_DB_CONSTRING;
+    # uncoverable branch true constant value
+    # uncoverable branch false constant value
     $localconfig->{mssql}->{username} = $DIRT_DB_USER if $DIRT_DB_USER;
+    # uncoverable branch true constant value
+    # uncoverable branch false constant value
     $localconfig->{mssql}->{password} = $DIRT_DB_PASS if $DIRT_DB_PASS;
     our $config = MCE::Shared->share( $localconfig );
     $self->plugin(

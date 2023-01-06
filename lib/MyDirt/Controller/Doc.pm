@@ -4,6 +4,11 @@ use DBI;
 use MyDirt::Schema;
 use feature qw(postderef);
 
+=head1 Doc.pm - Controller for documents
+Anything which is or of a document.
+
+=cut
+
 my $config = $MyDirt::config;
 
 my $orm = MyDirt::Schema->connect(
@@ -13,9 +18,12 @@ my $orm = MyDirt::Schema->connect(
 
 my $cache = $MyDirt::cache;
 
-sub getTypeList {
-    my $self = shift->openapi->valid_input or return;
+=head2 getTypeList
+Public enpoint serving metadata of all document templates.
+=cut
 
+sub getTypeList {
+    my $self = shift;
     my @all = $orm->resultset('TblDocType')->search( undef, {
 	columns  => [qw/ doctypeid doctypename /]
     });
@@ -25,8 +33,12 @@ sub getTypeList {
     $self->render( openapi => \@forms );
 }
 
+=head2 getTemplate
+Public enpoint serving application/pdf of a document by ID.
+=cut
+
 sub getTemplate {
-    my $self = shift->openapi->valid_input or return;
+    my $self = shift;
 
     my $id = $self->param('docid');
     my $doc = $orm->resultset('TblDocType')->find( $id );

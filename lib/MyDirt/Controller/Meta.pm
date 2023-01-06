@@ -13,7 +13,7 @@ GET endpoint which always sends a smiley face.
 =cut
 
     # Validate input request or return an error document
-    my $self = shift->openapi->valid_input or return;
+    my $self = shift;
 
     $self->render( openapi => { status => "🙂" } );
 }

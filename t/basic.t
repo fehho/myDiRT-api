@@ -35,4 +35,18 @@ $t->post_ok('/api/entity/sub', form => {
 })->status_is(200)
 ->json_has('/name');
 
+$t->post_ok('/api/entity/sub', form => {
+    token => ':>',
+    key => (keys %{$sub})[0]
+})->status_is(401);
+
+$t->post_ok('/api/entity/sub', form => {
+    token => $token,
+    key => 999
+})->status_is(401);
+
+$t->get_ok('/api/listFormTemplates')
+->status_is(200)
+->json_has('/0');
+
 done_testing();
