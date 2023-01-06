@@ -6,6 +6,7 @@ use Session::Token;
 use DBI;
 use MyDirt::Schema;
 use feature qw(postderef);
+use Try::Catch;
 =head1 Person.pm - Controller for actions about a person and their data
 Anything that is about individual, plus any persons above and below, go here.
 
@@ -28,8 +29,6 @@ my $orm = MyDirt::Schema->connect(
 
 my $tokens = Session::Token->new();
 
-my $blank = $auth->hash_password(''); #for anti-timing attack
-
 my $cache = $MyDirt::cache;
 
 sub login {
@@ -39,36 +38,38 @@ Checks that credentials contained inside of body params belong to a user, and if
 =cut
 
     my $self = shift->openapi->valid_input or return;
-
     my $response = {};
-    my $status   = 200;
-    my $username = $self->param('user');
-    my $user = $orm->resultset('TblLogin')->find({userloginid => $username});
-    my $hash = $user->userpassword;
-    if ( $auth->verify_password( $self->param('pass'), $hash ) ) {
-        $status = 200;
-        my $unique;
-        until ($unique) {
-            my $token = $tokens->get;
 
-          # uncoverable branch false this should never happen on a single thread
-            $unique = $token and next unless $cache->get($token);
-            $tokens = Session::Token->new;
-
-            # reseed this worker's generator
-            # all workers will likely start with the same seed upon spawning
-        }
-        $response->{token} = $unique;
-        $cache->set( $response->{token}, $user->userid->userid );
-	$response->{debug} = $user->userid->userid;
-    }
-    else {
-        $status = 418;
-        $response->{reason} = "being cringe";
-    }
-
-    $self->render( openapi => $response, status => $status );
+    try {
+	my $username = $self->param('user');
+	my $user = $orm->resultset('TblLogin')->find({userloginid => $username});
+	my $hash = $user->userpassword if $user;
+	if ( $auth->verify_password( $self->param('pass'), $hash ) ) {
+	    my $unique;
+	    until ($unique) {
+		my $token = $tokens->get;
+		# uncoverable branch false this should never happen on a single thread
+		$unique = $token and next unless $cache->get($token);
+		$tokens = Session::Token->new;
+		# reseed this worker's generator
+		# all workers will likely start with the same seed upon spawning
+	    }
+	    $response->{token} = $unique;
+	    $cache->set( $response->{token}, $user->userid->userid );
+	    $response->{debug} = $user->userid->userid;
+	    use feature 'say';
+	    say 'done!';
+	} else { die }
+     } catch {;
+	use feature 'say';
+	say 'caught!';
+	$self->stash( status => 401 );
+        $response->{message} = "Could not log in with provided credentials.";
+    } finally {;
+	$self->render( openapi => $response );
+    };
 }
+
 
 sub check {
 

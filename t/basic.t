@@ -7,11 +7,11 @@ my $t = Test::Mojo->new('MyDirt');
 
 $t->get_ok('/api/health')->status_is(200)->json_is({status => "🙂"});
 
-$t->post_ok('/api/get_token', form => { user => 'somebody@example.org', pass => 'not somebodys password password'} )->status_is(418);
+$t->post_ok('/api/get_token', form => { user => 'somebody@example.org', pass => 'not somebodys password password'} )->status_is(401);
 
-$t->post_ok('/api/get_token', form => {}, 'empty form')->status_is(400);
+$t->post_ok('/api/get_token', form => {}, 'empty form')->status_is(401);
 my $token = $t->post_ok('/api/get_token', form =>
-   { user => 'snuffy', pass => 'baba booey' }
+   { user => 'Luffy', pass => 'baba booey' }
 )->status_is(200)
 ->json_has('/token', 'got a token with good creds')
 ->tx->res->json->{token};

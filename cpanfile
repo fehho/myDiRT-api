@@ -9,6 +9,7 @@ requires 'MCE::Shared';
 requires 'DBI', '>=1.643';
 requires 'DBIx::Class::Schema';
 requires 'DBD::ODBC';
+requires 'Try::Catch';
 
 on 'test' => sub {
     requires 'Test::More';
