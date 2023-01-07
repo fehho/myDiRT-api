@@ -47,10 +47,11 @@ Checks that credentials contained inside of body params belong to a user, and if
 	my $hash = $user->userpassword if $user;
 	if ( $auth->verify_password( $self->param('pass'), $hash ) ) {
 	    my $unique;
-	    for (undef, not $unique, $tokens = Session::Token->new) {
+	    until ( $unique ) {
 		my $token = $tokens->get;
 		# uncoverable branch false this should never happen on a single thread
-		$unique = $token unless $cache->get($token);
+		 $unique = $token unless $cache->get($token);
+		 $tokens = Session::Token->new unless $unique;
 		# reseed this worker's generator
 		# all workers will likely start with the same seed upon spawning
 	    }
