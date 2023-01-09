@@ -185,27 +185,6 @@
 			    "schema": {}
 			}
 		    ],
-		    "requestBody": {
-			"required": false,
-			"content": {
-			    "application/x-www-form-urlencoded": {
-				"schema": {
-				    "properties": {
-					"pass": {
-					    "type": "string",
-					    "minLength": 6
-					},
-					"user": {
-			                    "type": "string",
-		                            "maxLength": 20
-		                        }
-					
-				},
-				    "required": [ "user", "pass" ]
-			    }
-			}
-		    }
-		},
 		"summary": "Try to get a session token using username/password pair",
 		"responses": {
 		    "200": {

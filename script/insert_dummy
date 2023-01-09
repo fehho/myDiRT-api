@@ -89,12 +89,12 @@ $orm->resultset('TblUserSubordinate')->create({
 
 $orm->resultset('TblLogin')->create({
     userid => $snuffy,
-    userloginid =>  'Luffy',
+    userloginid =>  'Snuffy',
     userpassword => $auth->hash_password('baba booey')
 });
 $orm->resultset('TblLogin')->create({
     userid => $nuffy,
-    userloginid =>  'Buffy',
+    userloginid =>  'Ryleigh',
     userpassword => $auth->hash_password('123456')
 });
 
