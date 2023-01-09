@@ -162,6 +162,18 @@ Takes a token and a user key then returns some information about the user the ID
 	    $supervisor->rankid->ranktype.
 	    " ".
             $supervisor->userlastname;
+	$response->{documents} = [];
+	for my $doc ( $airman->tbl_xref_user_docs ) {
+	    $doc = $doc->docid;
+	    my $docMeta = {
+		Type  => $doc->doctypeid->doctypename,
+		Date  => 1672781365,
+		Unit  => $response->{Organization},
+		Where => $doc->docwhere,
+		docid => $doc->docid
+	    };
+	    push $response->{documents}->@*, $docMeta;
+	}
     } catch {
         $response = { message =>
               'Supplied key does not belong to one of your subordinates' };

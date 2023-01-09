@@ -33,7 +33,7 @@ $t->post_ok('/api/entity/sub', form => {
     token => $token,
     key => (keys %{$sub})[0]
 })->status_is(200)
-->json_has('/name');
+->json_has('/Name');
 
 $t->post_ok('/api/entity/sub', form => {
     token => ':>',
