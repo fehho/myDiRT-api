@@ -150,12 +150,13 @@ Takes a token and a user key then returns some information about the user the ID
             { userid => $callingUser }
         );
 	$response = {
-            FirstName  => $airman->userfirstname,
-	    MiddleName => $airman->usermiddlename,
-            LastName   => $airman->userlastname,
-	    Rank => $airman->rankid->ranktype,
-	    Organization => $airman->organizationid->orgname,
-	    Office => $airman->officesymbol,
+            name  => [
+		$airman->userfirstname,
+		$airman->usermiddlename, $airman->userlastname,
+		],
+	    rank => $airman->rankid->ranktype,
+	    org => $airman->organizationid->orgname,
+	    office => $airman->officesymbol,
         };
 	my $supervisor = $orm->resultset('TblUser')->find( $callingUser );
 	$response->{supervisor} =
