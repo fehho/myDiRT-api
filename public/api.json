@@ -295,7 +295,7 @@
     },
     "servers": [
 	{
-	    "url": "/api"
+	    "url": "https://dirt.af.mil/api"
 	}
     ]
 }
