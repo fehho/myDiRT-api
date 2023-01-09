@@ -146,19 +146,27 @@ Takes a token and a user key then returns some information about the user the ID
     my $callingUser = $cache->get( $self->param('token') );
     my $response;
     try {
-        my $check = $airman->tbl_user_subordinates_subordinateids->find(
+        my $check = $airman->tbl_user_subordinates_userids->find(
             { userid => $callingUser }
         );
 	$response = {
-            name => [
-                $airman->userfirstname, $airman->usermiddlename,
-                $airman->userlastname
-            ]
+            FirstName  => $airman->userfirstname,
+	    MiddleName => $airman->usermiddlename,
+            LastName   => $airman->userlastname,
+	    Rank => $airman->rankid->ranktype,
+	    Organization => $airman->organizationid->orgname,
+	    Office => $airman->officesymbol,
         };
+	my $supervisor = $orm->resultset('TblUser')->find( $callingUser );
+	$response->{supervisor} =
+	    $supervisor->rankid->ranktype.
+	    " ".
+            $supervisor->userlastname;
     } catch {
         $response = { message =>
               'Supplied key does not belong to one of your subordinates' };
         $self->stash( status => 401 );
+	warn $_[0]
     } finally {
 	$self->render( openapi => $response );
     }
