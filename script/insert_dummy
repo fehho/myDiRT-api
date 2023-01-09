@@ -34,6 +34,10 @@ my $org = $orm->resultset('TblOrg')->find_or_create({
     orgid   => '55200',
     orgname => '552nd ACNS',
 });
+my $css = $orm->resultset('TblOrg')->find_or_create({
+    orgid   => '06900',
+    orgname => '69th CSS',
+});
 my @ranks = qw/ AB Amn A1C SrA SSgt TSgt MSgt SMSgt CMSgt /;
 push @ranks, ('2d Lt', '1st Lt', 'Capt', 'Maj', 'Lt Col', 'Col', 'Brig Gen', 'Maj Gen', 'Lt Gen', 'Gen');
 my $i = 0;
@@ -50,6 +54,17 @@ my $snuffy = $orm->resultset('TblUser')->create({
      organizationid => $org,
      rankid => 1
 });
+
+my $sjobs = $orm->resultset('TblUser')->create({
+        userfirstname => 'Steve',
+        usermiddlename => 'F',
+        userlastname => 'Jobs',
+        organizationid => $css,
+        rankid => 4,
+	officesymbol => 'UOD',
+	roleid => $role
+});
+
 my $nuffy = $orm->resultset('TblUser')->create({
      userfirstname => 'Airman',
      usermiddlename => 'Onesee',
@@ -61,11 +76,17 @@ my $nuffy = $orm->resultset('TblUser')->create({
      organizationid => $org,
      rankid => 3
 });
+
 my $users = $orm->resultset('TblUser');
 $orm->resultset('TblUserSubordinate')->create({
     userid => $snuffy,
     subordinateid => $nuffy
+					      });
+$orm->resultset('TblUserSubordinate')->create({
+    userid => $snuffy,
+    subordinateid => $sjobs
 });
+
 $orm->resultset('TblLogin')->create({
     userid => $snuffy,
     userloginid =>  'Luffy',
@@ -107,7 +128,7 @@ $doctypes->find_or_create({
     doctypename => 'LOR',
     doctemplate => $templates{LOCAR}
 });
-$doctypes->find_or_create({
+my $doc341 = $doctypes->find_or_create({
     doctypeid => 341,
     doctypename => 'AETC Form 341',
     doctemplate => $templates{aetc341}
@@ -118,13 +139,33 @@ $doctypes->find_or_create({
     doctemplate => $templates{af3070a}
 });
 
-my $snuffyLOC = $orm->resultset('TblDoc')->create({
+my @snuffyLOC = map { $orm->resultset('TblDoc')->create({
     doctypeid => $loc,
     docwhere  => 'Tinker AFB',
     doc       => $templates{LOCAR},
-    hashkey   => 'D4F55F21-3ED6-458D-846A-6CAC41606AAF'
-});
+    hashkey   => 'D4F55F21-3ED6-458D-846A-6CAC41606AAF',
+}) } (1..rand(3));
+
+my @snuffy341 = map { $orm->resultset('TblDoc')->create({
+    doctypeid => $doc341,
+    docwhere  => 'Tinker AFB',
+    doc       => $templates{aetc341},
+    hashkey   => 'D4F55F21-3ED6-458D-846A-6CAC41606AAF',
+}) } (1..rand(3));
+
+my @jobsLOC = map { $orm->resultset('TblDoc')->create({
+    doctypeid => $loc,
+    docwhere  => 'Tinker AFB',
+    doc       => $templates{LOCAR},
+    hashkey   => 'D4F55F21-3ED6-458D-846A-6CAC41606AAF',
+}) } (1..rand(5));
+
 $orm->resultset('TblXrefUserDoc')->create({
     userid => $snuffy,
-    docid => $snuffyLOC
-});
+    docid => $_
+}) for @snuffyLOC, @snuffy341;
+
+$orm->resultset('TblXrefUserDoc')->create({
+    userid => $sjobs,
+    docid => $_
+}) for @jobsLOC;
